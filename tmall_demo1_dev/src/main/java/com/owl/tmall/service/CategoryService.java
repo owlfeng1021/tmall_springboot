@@ -28,4 +28,18 @@ public class CategoryService {
         return new Page4Navigator<>(pageFromJpa,navigatePage); // 放到了pojo方法里面生成
 
     }
+    public void save(Category category){
+        categoryDao.save(category);
+    }
+    public  void  delete(int id){
+        categoryDao.delete(id);
+    }
+    public Category get(int id)
+    {
+    return categoryDao.getOne(id);
+    }
+    public void update(Category category){
+        categoryDao.save(category);
+    }
 }
+

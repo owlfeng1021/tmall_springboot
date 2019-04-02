@@ -21,7 +21,7 @@ public class Page4Navigator<T> {
 
     List<T> content; // 这里是查出来的内容
 
-    boolean isHasContent;
+    boolean isHasContent; //
 
     boolean first;
 
@@ -29,18 +29,23 @@ public class Page4Navigator<T> {
 
     boolean isHasNext;
 
-    boolean isHasPrevious;
+    boolean isHasPrevious;// 有没有上一页
 
-    int[] navigatepageNums;
+    int[] navigatepageNums; //id的集合
 
     public Page4Navigator() {
         //这个空的分页是为了 Redis 从 json格式转换为 Page4Navigator 对象而专门提供的
     }
 
+    /**
+     * @description
+     * @param pageFromJPA
+     * @param navigatePages
+     */
     public Page4Navigator(Page<T> pageFromJPA,int navigatePages) {
         this.pageFromJPA = pageFromJPA;
         this.navigatePages = navigatePages;
-
+//      下面是把 jpa 封装的分页属性查到 自己封装的对象里面
         totalPages = pageFromJPA.getTotalPages();
 
         number  = pageFromJPA.getNumber() ;
@@ -62,23 +67,23 @@ public class Page4Navigator<T> {
         isHasNext = pageFromJPA.hasNext();
 
         isHasPrevious  = pageFromJPA.hasPrevious();
-
+//        最后是把封装好的对象 进行判断
         calcNavigatepageNums();
 
     }
-
+// calculation 计算
     private void calcNavigatepageNums() {
         int navigatepageNums[];
         int totalPages = getTotalPages();
-        int num = getNumber();
-        //当总页数小于或等于导航页码数时
+        int num = getNumber(); //Number 是第几页 基于0
+        //当总页数小于或等于导航页码数时 （5）
         if (totalPages <= navigatePages) {
             navigatepageNums = new int[totalPages];
             for (int i = 0; i < totalPages; i++) {
                 navigatepageNums[i] = i + 1;
             }
         } else { //当总页数大于导航页码数时
-            navigatepageNums = new int[navigatePages];
+            navigatepageNums = new int[navigatePages]; // 6-2 6+2  4 8
             int startNum = num - navigatePages / 2;
             int endNum = num + navigatePages / 2;
 
@@ -88,7 +93,8 @@ public class Page4Navigator<T> {
                 for (int i = 0; i < navigatePages; i++) {
                     navigatepageNums[i] = startNum++;
                 }
-            } else if (endNum > totalPages) {
+            }
+            else if (endNum > totalPages) {
                 endNum = totalPages;
                 //最后navigatePages页
                 for (int i = navigatePages - 1; i >= 0; i--) {

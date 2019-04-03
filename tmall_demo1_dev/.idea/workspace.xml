@@ -4,10 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/owl/tmall/pojo/Product.java" line="9" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1bd873b4-fe5f-4e69-ade8-1ec874f38c0a" name="Default Changelist" comment="2019/4/1">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/owl/tmall/dao/ProductImageDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/owl/tmall/pojo/ProductImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="1bd873b4-fe5f-4e69-ade8-1ec874f38c0a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -145,11 +142,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/owl/tmall/dao/ProductImageDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="152">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -462,7 +456,7 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554293194149" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554294545270" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/java" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -539,7 +533,7 @@
       <workItem from="1554116785539" duration="100000" />
       <workItem from="1554116942071" duration="5443000" />
       <workItem from="1554167763750" duration="26988000" />
-      <workItem from="1554273718261" duration="14588000" />
+      <workItem from="1554273718261" duration="15228000" />
     </task>
     <task id="LOCAL-00001" summary="2019/4/1">
       <created>1554116821793</created>
@@ -555,14 +549,22 @@
       <option name="project" value="LOCAL" />
       <updated>1554116987580</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="2019/4/3">
+      <created>1554293220192</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1554293220193</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47162000" />
+    <option name="totallyTimeSpent" value="47802000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.86118597" visible="true" weight="0.24713467" />
       <window_info id="Structure" order="1" sideWeight="0.13881402" side_tool="true" visible="true" weight="0.24713467" />
@@ -604,7 +606,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="2019/4/1" />
-    <option name="LAST_COMMIT_MESSAGE" value="2019/4/1" />
+    <MESSAGE value="2019/4/3" />
+    <option name="LAST_COMMIT_MESSAGE" value="2019/4/3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1074,11 +1077,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/owl/tmall/dao/ProductImageDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="152">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>

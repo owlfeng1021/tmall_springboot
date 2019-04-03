@@ -8,15 +8,21 @@
     $(function(){
         var data4Vue = {
             uri:'categories',
+            listURL:'admin_category_list',
             pagination:{},
             beans: [],
             bean:{id:0,name:""}, //这里是把 分页的对象写出来
+            upbean:{id:0,name:""}, //这里把修改上传的对象写出来
             file: null // 图片
-
         };
 
         //ViewModel
         var vue = new Vue({
+            provide () {
+                return {
+                    reload: this.reload
+                }
+            },
             el: '#workingArea',
             data: data4Vue,
             mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
@@ -71,26 +77,77 @@
                         }
                     });
                 },
-                handleEdit(id) {
+                edit(id) {
+
                     this.id = id
-                    this.dialogFormVisible = true // 打开窗口
+                    console.log(id);
+                    $('#edit').modal('toggle') // 打开窗口
                     if (id !== '') { // 修改
-                        enterpriseApi.findById(id).then(response => {
-                            if (response.flag) {
-                                this.pojo = response.data
-                            }
-                        })
+                        this.get(id)
                     } else {
-                        this.pojo = {} // 清空数据
+                      /*  this.pojo = {}*/ // 清空数据
                     }
                 },
+                get(param){
+                    var id = param;
+                    var url = this.uri+"/"+id;
+                    axios.get(url).then(function(response) {
+                        vue.upbean = response.data;
+                    })
+                },
+                update(){
+                    console.log('updata');
+                    var url = this.uri+"/"+this.upbean.id;
+                    //axios.js 上传文件要用 formData 这种方式
+                    var formData = new FormData();
+                    formData.append("image", this.file);
+                    formData.append("name", this.upbean.name);
+                    axios.put(url,formData).then(function(response){
+                       $('#edit').modal('toggle')
 
+                        upbean = {id:0,name:""}//清空数据
+                        vue.list(0);
+                        console.log('测试')
+                    });
+                },
             }
         });
     });
 
 </script>
 <div id="workingArea" >
+    <a  @click="update">提 交</a>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="panel panel-warning editDiv">
+                    <div class="panel-heading">编辑分类</div>
+                    <div class="panel-body">
+                        <table class="editTable">
+                            <tr>
+                                <td>分类名称</td>
+                                <td><input id="upname" @keyup.enter="update" v-model.trim="upbean.name" type="text" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>分类图片</td>
+                                <td>
+                                    <input id="categoryPic2" accept="image/*" type="file" name="image" @change="getFile($event)" />
+                                </td>
+                            </tr>
+                            <tr class="submitTR">
+                                <td colspan="2" align="center">
+                                    <input type="hidden" name="id"   v-model.trim="upbean.id" >
+                                    <a href="#nowhere" class="btn btn-success" @click="update">提 交</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     <h1 class="label label-info" >分类管理</h1>
     <br>
     <br>
@@ -123,7 +180,7 @@
                     <a :href="'admin_product_list?cid=' + bean.id "><span class="glyphicon glyphicon-shopping-cart"></span></a>
                 </td>
                 <td>
-                    <a :href="'admin_category_edit?id=' + bean.id "><span class="glyphicon glyphicon-edit"></span></a>
+                    <a @click="edit(bean.id)"><span class="glyphicon glyphicon-edit"></span></a>
                 </td>
                 <td>
                     <a href="#nowhere"  @click="deleteBean(bean.id)"><span class="   glyphicon glyphicon-trash"></span></a>
@@ -158,6 +215,8 @@
         </div>
     </div>
 </div>
+
+
 <div th:replace="include/admin/adminFooter::html" ></div>
 </body>
 </html>

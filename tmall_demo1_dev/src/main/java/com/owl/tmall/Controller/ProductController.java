@@ -2,6 +2,7 @@ package com.owl.tmall.Controller;
 
 import com.owl.tmall.pojo.Product;
 import com.owl.tmall.service.CategoryService;
+import com.owl.tmall.service.ProductImageService;
 import com.owl.tmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ProductImageService productImageService;
     @GetMapping("/categories/{cid}/products")
     public Page4Navigator<Product> list(
             @PathVariable int cid,
@@ -24,6 +27,7 @@ public class ProductController {
     {
         start=start<0?0:start;
         Page4Navigator<Product> list = productService.list(cid, start, size, 5);
+        productImageService.setFirstProdutImages(list.getContent());
         return list;
     }
 

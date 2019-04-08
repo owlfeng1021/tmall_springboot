@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProductImageDao extends JpaRepository<ProductImage,Integer> {
 //    @Modifying
-//    @Query(value = "SELECT * from productimage image WHERE pid=?1 AND type=?2 ORDER BY image.id desc ",nativeQuery = true)
-    public List<ProductImage> findByProductaAndTypeOrderByIdDesc(Product product,String type);
-    //
+    @Query(value = "SELECT * from productimage image WHERE pid=?1 AND type=?2 ORDER BY image.id desc ",nativeQuery = true)
+    public List<ProductImage> findByProductAndTypeOrderByIdDesc(Product product,String type);
+
 }

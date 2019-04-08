@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import util.Page4Navigator;
 
+import java.util.List;
+
 @Service
 public class PropertyService {
     @Autowired
@@ -40,6 +42,9 @@ public class PropertyService {
         Page<Property> byCategory = propertyDAO.findByCategory(one, pageable);
         return new Page4Navigator<>(byCategory,navigatePages);
 
+    }
+    public List<Property> findByCategory(Category category){
+        return  propertyDAO.findByCategory(category);
     }
 
 }

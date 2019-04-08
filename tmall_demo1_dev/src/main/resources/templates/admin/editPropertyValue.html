@@ -12,7 +12,6 @@
             product: '',
             category:'',
         };
-
         //ViewModel
         var vue = new Vue({
             el: '#workingArea',
@@ -47,12 +46,10 @@
                     });
                 }
             }
-
         });
     });
 
 </script>
-
 <div id="workingArea" >
     <ol class="breadcrumb">
         <li><a href="admin_category_list">所有分类</a></li>
@@ -60,17 +57,14 @@
         <li class="active">{{product.name}}</li>
         <li class="active">产品属性管理</li>
     </ol>
-
     <div class="editPVDiv">
         <div v-for="bean in beans" class="eachPV">
             <span class="pvName" >{{bean.property.name}}</span>
-            <span class="pvValue"><input class="pvValue" :id="'pvid'+bean.id" type="text" v-model="bean.value" @keyup="update(bean)"></span>
+            <span class="pvValue"><input class="pvValue" :id="'pvid'+bean.id" type="text" v-model="bean.value" @keyup="update(bean)"></span><!--静态的数据 使用''括起来-->
         </div>
         <div style="clear:both"></div>
     </div>
-
 </div>
-
 <div th:replace="include/admin/adminFooter::html" ></div>
 </body>
 </html>

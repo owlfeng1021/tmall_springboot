@@ -19,8 +19,11 @@ public class PropertyValueService {
         propertyValueDao.save(bean);
     }
     public void init(Product product) {
+        // 从产品里面 找出 categoryid
         List<Property> byCategory = propertyService.findByCategory(product.getCategory());
+        // 找到所有的property 然后把所有的 value都初始化一遍都为空
         for (Property property: byCategory) {
+            // 先找一下之前没有声明过的value 如果为空就把基本的 product和property属性放到 数据库里面去
             PropertyValue propertyValue = getPropertyValue(product, property);
             if (null==propertyValue){
                 PropertyValue temp = new PropertyValue();

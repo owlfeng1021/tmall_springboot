@@ -1,8 +1,10 @@
 package com.owl.tmall.service;
 
 import com.owl.tmall.dao.CategoryDao;
+import com.owl.tmall.dao.ProductDao;
 import com.owl.tmall.dao.PropertyDao;
 import com.owl.tmall.pojo.Category;
+import com.owl.tmall.pojo.Product;
 import com.owl.tmall.pojo.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ public class PropertyService {
     private CategoryService categoryService;
     @Autowired
     private PropertyDao propertyDAO;
+
     public void add(Property bean) {
         propertyDAO.save(bean);
     }

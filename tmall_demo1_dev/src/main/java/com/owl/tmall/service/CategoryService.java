@@ -2,6 +2,7 @@ package com.owl.tmall.service;
 
 import com.owl.tmall.dao.CategoryDao;
 import com.owl.tmall.pojo.Category;
+import com.owl.tmall.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,31 @@ public class CategoryService {
     }
     public void update(Category category){
         categoryDao.save(category);
+    }
+    public void  removeCategoryFromProduct(List<Category> categoryList)
+    {
+        for (Category category: categoryList)
+        {
+            removeCategoryFromProduct(category);
+        }
+    }
+    public void  removeCategoryFromProduct(Category category){
+        List<Product> products = category.getProducts();
+        for (Product p:products) {
+            if (null !=p)
+            {
+                p.setCategory(null);
+            }
+        }
+        List<List<Product>> productsByRow = category.getProductsByRow();
+        if (null!=productsByRow){
+            for (List<Product> productList:  productsByRow) {
+                for (Product product: productList) {
+                    product.setCategory(null);
+                }
+            }
+        }
+
     }
 }
 

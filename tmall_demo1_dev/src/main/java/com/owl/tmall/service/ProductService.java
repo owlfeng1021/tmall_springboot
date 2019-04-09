@@ -3,6 +3,7 @@ package com.owl.tmall.service;
 import com.owl.tmall.dao.ProductDao;
 import com.owl.tmall.pojo.Category;
 import com.owl.tmall.pojo.Product;
+import com.owl.tmall.pojo.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,10 @@ public class ProductService {
     CategoryService categoryService;
     @Autowired
     ProductImageService productImageService;
-
+    @Autowired
+    OrderItemService orderItemService;
+    @Autowired
+    ReviewService reviewService;
     public void add(Product bean) {
         productDAO.save(bean);
     }
@@ -89,5 +93,19 @@ public class ProductService {
     //4. 查询某个分类下的所有产品
     public List<Product> listByCategory(Category category){
        return  productDAO.findByCategoryOrderById(category);
+    }
+    // 设置产品设置销量和评价数量的方法：
+    public void setSaleAndReviewNumber(Product product) {
+        int saleCount = orderItemService.getSaleCount(product);//销量
+        product.setSaleCount(saleCount);
+
+        int reviewCount = reviewService.getCount(product);// 评论的数量
+        product.setReviewCount(reviewCount);
+
+    }
+
+    public void setSaleAndReviewNumber(List<Product> products) {
+        for (Product product : products)
+            setSaleAndReviewNumber(product);
     }
 }

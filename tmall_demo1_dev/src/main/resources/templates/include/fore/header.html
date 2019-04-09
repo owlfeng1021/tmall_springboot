@@ -81,7 +81,12 @@
                 alert("这个功能没做，蛤蛤~");
             });
         }
-
+/*
+*  三个拦截器
+*  subStringFilter 是进行文字截取
+*  formatMoneyFilter 规范价格数
+*  formatDateFilter 进行时间上的转换
+* */
         Vue.filter("subStringFilter", function(value, start, end){
             if (!value)
                 return '';

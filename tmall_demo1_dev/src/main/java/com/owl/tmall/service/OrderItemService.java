@@ -3,6 +3,7 @@ package com.owl.tmall.service;
 import com.owl.tmall.dao.OrderItemDao;
 import com.owl.tmall.pojo.Order;
 import com.owl.tmall.pojo.OrderItem;
+import com.owl.tmall.pojo.Product;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.List;
 @Service
 public class OrderItemService {
     @Autowired
-    private OrderItemDao OrderItemDao;
+    private OrderItemDao orderItemDao;
     @Autowired
     private ProductImageService productImageServicel;
     /**
@@ -45,7 +46,21 @@ public class OrderItemService {
 
 //    public void fill(Order order) {}
     public List<OrderItem> listByOrder(Order order){
-        return OrderItemDao.findByOrderOrderByIdDesc(order);
+        return orderItemDao.findByOrderOrderByIdDesc(order);
+    }
+
+    public int getSaleCount(Product product) {
+        List<OrderItem> ois =listByProduct(product);
+        int result =0;
+        for (OrderItem oi : ois) {
+            if(null!=oi.getOrder())
+                if(null!= oi.getOrder() && null!=oi.getOrder().getPayDate())
+                    result+=oi.getNumber();
+        }
+        return result;
+    }
+    public List<OrderItem> listByProduct(Product product) {
+        return orderItemDao.findByProduct(product);
     }
 
 }

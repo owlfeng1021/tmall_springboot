@@ -72,7 +72,7 @@
                 });
                 return false;
             });
-
+//  这里是 登录模态框
             $("button.loginSubmitButton").click(function(){
                 var url =  "forelogin";
                 if(0==vue.user.name.length){
@@ -97,7 +97,9 @@
                     }
                 });
             });
-
+/*
+*   这里就是轮播图的操作了
+* */
             $("img.smallImage").mouseenter(function(){
                 var bigImageURL = $(this).attr("bigImageURL");
                 $("img.bigImg").attr("src",bigImageURL);
@@ -109,7 +111,6 @@
                         var bigImageURL = $(this).attr("bigImageURL");
                         img = new Image();
                         img.src = bigImageURL;
-
                         img.onload = function(){
                             $("div.img4load").append($(img));
                         };

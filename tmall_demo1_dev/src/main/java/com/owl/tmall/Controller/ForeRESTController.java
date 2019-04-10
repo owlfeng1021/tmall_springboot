@@ -1,5 +1,6 @@
 package com.owl.tmall.Controller;
 
+import com.owl.tmall.comparator.*;
 import com.owl.tmall.pojo.*;
 import com.owl.tmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.util.HtmlUtils;
 import util.Result;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,7 @@ public class ForeRESTController {
         List<Category> cs= categoryService.getCategory();
         productService.fill(cs);
         productService.fillByRow(cs);
+//      测试那个注解 JsonIgnoreProperties()
         categoryService.removeCategoryFromProduct(cs);
         return cs;
     }
@@ -97,5 +100,48 @@ public class ForeRESTController {
         map.put("reviews", reviews);
 
         return Result.success(map);
+    }
+    @GetMapping("forecheckLogin")
+    public Object checkLogin( HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(null!=user){
+            return  Result.success();
+        }
+        return Result.fail("未登录");
+    }
+
+    /**
+     *  就是使用comparator 来进行排序 自定义规则然后排序
+     * @param cid
+     * @param sort
+     * @return
+     */
+    @GetMapping("forecategory/{cid}")
+    public Object category(@PathVariable int cid,String sort){
+        Category category = categoryService.get(cid);
+        productService.fill(category);
+        productService.setSaleAndReviewNumber(category.getProducts());
+        categoryService.removeCategoryFromProduct(category);
+        if (null!=sort)
+        {
+            switch(sort){
+                case "review":
+                    Collections.sort(category.getProducts(),new ProductReviewComparator());
+                    break;
+                case "date" :
+                    Collections.sort(category.getProducts(),new ProductDateComparator());
+                    break;
+                case "saleCount" :
+                    Collections.sort(category.getProducts(),new ProductSaleCountComparator());
+                    break;
+                case "price":
+                    Collections.sort(category.getProducts(),new ProductPriceComparator());
+                    break;
+                case "all":
+                    Collections.sort(category.getProducts(),new ProductAllComparator());
+                    break;
+            }
+        }
+        return category;
     }
 }

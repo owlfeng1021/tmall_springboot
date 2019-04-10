@@ -31,7 +31,10 @@ public class Product {
     int id;
 
     @ManyToOne
-    @JsonIgnoreProperties({"handler","hibernateLazyInitializer" })
+//   @JsonIgnoreProperties(ignoreUnknown = true, value = {"category","handler","hibernateLazyInitializer" })
+//   因为这个注解是给类用的 所以这里不能是 category要是product 但是我的category的pojo类里面是没有关联product的
+//   所以这里是不能使用这个方法的
+    @JsonIgnoreProperties({ "handler","hibernateLazyInitializer"})
     @JoinColumn(name = "cid")
     Category category;
 

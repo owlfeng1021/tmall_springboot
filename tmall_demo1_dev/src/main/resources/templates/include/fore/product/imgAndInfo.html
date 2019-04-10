@@ -56,6 +56,7 @@
             });
             $(".buyLink").click(function(){
                 var url = "forecheckLogin";
+                // 检查用户是否登录
                 axios.get(url).then(function(response) {
                     if(0==response.data.code){
                         var pid = vue.p.id;

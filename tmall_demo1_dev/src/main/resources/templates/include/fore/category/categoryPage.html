@@ -16,20 +16,18 @@
                     this.load();
                 },
                 methods: {
-                    load:function(){
-                        this.sort = sort;
-                        var url =  this.uri+"/"+cid+"?sort="+sort;
-                        axios.get(url).then(function(response) {
-                            vue.c = response.data;
-                            vue.$nextTick(function(){
-                                linkDefaultActions();
-                            })
+                    load(){
+                        this.sort=sort;
+                        var url=this.uri+"/"+cid+"?"+"sort="+this.sort;
+                        axios.get(url).then(response=>{
+                           vue.c=response.data;
+                           vue.$nextTick(function () {
+                               linkDefaultActions();
+                           })
                         });
-
                     }
                 }
             });
-
         })
     </script>
     <title>模仿天猫官网-{{c.name}}}</title>

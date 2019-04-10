@@ -4,6 +4,7 @@ import com.owl.tmall.dao.OrderItemDao;
 import com.owl.tmall.pojo.Order;
 import com.owl.tmall.pojo.OrderItem;
 import com.owl.tmall.pojo.Product;
+import com.owl.tmall.pojo.User;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,4 +64,13 @@ public class OrderItemService {
         return orderItemDao.findByProduct(product);
     }
 
+    public List<OrderItem> listByUser(User user){
+        return orderItemDao.findByUserAndOrderIsNull(user);
+    }
+    public void add(OrderItem orderItem){
+        orderItemDao.save(orderItem);
+    }
+    public void update(OrderItem orderItem){
+        orderItemDao.save(orderItem);
+    }
 }

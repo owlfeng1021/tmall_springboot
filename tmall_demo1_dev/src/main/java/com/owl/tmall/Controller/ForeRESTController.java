@@ -28,6 +28,9 @@ public class ForeRESTController {
     PropertyValueService propertyValueService;
     @Autowired
     ReviewService reviewService;
+    @Autowired
+    OrderItemService orderItemService;
+
 
     @GetMapping("/forehome")
     public Object home() {
@@ -143,5 +146,71 @@ public class ForeRESTController {
             }
         }
         return category;
+    }
+    @PostMapping("foresearch")
+    public Object search(String keyword,
+                         @RequestParam(value = "start",defaultValue = "0")int start,
+                         @RequestParam(value = "size",defaultValue = "20")int size){
+        if (null==keyword)
+        {
+            keyword="";
+        }
+//      查找操作
+        List<Product> ps=productService.search(keyword,start,size);
+        productImageService.setFirstProdutImages(ps);
+        productService.setSaleAndReviewNumber(ps);
+        return  ps;
+    }
+    @GetMapping("forebuyone")
+    public Object buyone(int pid, int num, HttpSession session){
+       return  buyoneAndAddCart(pid,num,session);
+    }
+
+    /**
+     * 接下来就是新增订单项OrderItem， 新增订单项要考虑两个情况
+     * a. 如果已经存在这个产品对应的OrderItem，并且还没有生成订单，即还在购物车中。 那么就应该在对应的OrderItem基础上，调整数量
+     * a.1 基于用户对象user，查询没有生成订单的订单项集合
+     * a.2 遍历这个集合
+     * a.3 如果产品是一样的话，就进行数量追加
+     * a.4 获取这个订单项的 id
+     *
+     * b. 如果不存在对应的OrderItem,那么就新增一个订单项OrderItem
+     * b.1 生成新的订单项
+     * b.2 设置数量，用户和产品
+     * b.3 插入到数据库
+     * b.4 获取这个订单项的 id
+     *
+     * 5.返回当前订单项id
+     * @param pid
+     * @param num
+     * @param session
+     * @return
+     */
+    private Object buyoneAndAddCart(int pid, int num, HttpSession session){
+        Product product = productService.get(pid);
+        int oiid = 0;
+
+        User user =(User)  session.getAttribute("user");
+        boolean found = false;
+        List<OrderItem> ois = orderItemService.listByUser(user);
+        for (OrderItem oi : ois) {
+            //先按照user查出orderitem 进行对比是添加的重复product 如果是就把他们的数量相加  如果没有就执行下面的代码
+            if(oi.getProduct().getId()==product.getId()){
+                oi.setNumber(oi.getNumber()+num);
+                orderItemService.update(oi);
+                found = true;
+                oiid = oi.getId();
+                break;
+            }
+        }
+        if(!found){
+            OrderItem oi = new OrderItem();
+            oi.setUser(user);
+            oi.setProduct(product);
+            oi.setNumber(num);
+            orderItemService.add(oi);
+            oiid = oi.getId();
+        }
+        return oiid;
     }
 }

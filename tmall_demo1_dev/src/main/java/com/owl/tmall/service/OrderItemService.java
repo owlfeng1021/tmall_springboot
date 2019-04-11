@@ -73,4 +73,10 @@ public class OrderItemService {
     public void update(OrderItem orderItem){
         orderItemDao.save(orderItem);
     }
+    public OrderItem get(int id){
+        return  orderItemDao.getOne(id);
+    }
+    public void delete(int id){
+        orderItemDao.delete(id);
+    }
 }

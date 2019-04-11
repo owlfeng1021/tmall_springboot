@@ -3,12 +3,15 @@ package com.owl.tmall.service;
 import com.owl.tmall.dao.OrderDao;
 import com.owl.tmall.pojo.Order;
 import com.owl.tmall.pojo.OrderItem;
+import com.owl.tmall.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import util.Page4Navigator;
 
 import java.util.List;
@@ -34,6 +37,9 @@ public class OrderService {
 
     @Autowired
     OrderDao orderDao;
+    @Autowired
+    OrderItemService orderItemService;
+
     public Page4Navigator<Order> list(int start,int size,int navigatePages){
 //         sort
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -45,7 +51,7 @@ public class OrderService {
         return  new Page4Navigator<Order>(all,navigatePages);
     }
 
-    private void removeOrderFromOrderItem(Order order) {
+    public void removeOrderFromOrderItem(Order order) {
         List<OrderItem> orderItems = order.getOrderItems();
         for (OrderItem oi:orderItems)
         {
@@ -57,11 +63,48 @@ public class OrderService {
             removeOrderFromOrderItem(o);
         }
     }
-
+    public void add(Order order){
+        orderDao.save(order);
+    }
     public Order get(int id){
         return  orderDao.getOne(id);
     }
     public void update(Order order){
          orderDao.save(order);
     }
+//    增加 add(Order o, List<OrderItem> ois)方法，该方法通过注解进行事务管理
+@Transactional(propagation= Propagation.REQUIRED,rollbackForClassName="Exception")
+public float add(Order order, List<OrderItem> ois) {
+    float total = 0;
+    add(order);
+
+    if(false)
+        throw new RuntimeException();
+
+    for (OrderItem oi: ois) {
+        oi.setOrder(order);
+        orderItemService.update(oi);
+        total+=oi.getProduct().getPromotePrice()*oi.getNumber();
+    }
+    return total;
 }
+    public List<Order> listByUserWithoutDelete(User user) {
+        List<Order> orders = listByUserAndNotDeleted(user);
+        orderItemService.fill(orders);
+        return orders;
+    }
+    public List<Order> listByUserAndNotDeleted(User user) {
+        return orderDao.findByUserAndStatusNotOrderByIdDesc(user, OrderService.delete);
+    }
+    // 用于计算订单总金额  订单的金额 orderitem .getproduct .price * ord
+    public void calc(Order o) {
+        // 通过 order 找到 orderitem
+        List<OrderItem> orderItems = o.getOrderItems();
+        float total = 0;
+        for (OrderItem orderItem:orderItems) {
+            total+=orderItem.getProduct().getPromotePrice()*orderItem.getNumber();
+        }
+        o.setTotal(total);
+    }
+}
+

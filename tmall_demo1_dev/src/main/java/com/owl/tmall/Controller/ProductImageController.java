@@ -3,18 +3,23 @@ package com.owl.tmall.Controller;
 import com.owl.tmall.dao.CategoryDao;
 import com.owl.tmall.dao.ProductDao;
 import com.owl.tmall.dao.ProductImageDao;
+import com.owl.tmall.pojo.OrderItem;
 import com.owl.tmall.pojo.Product;
 import com.owl.tmall.pojo.ProductImage;
+import com.owl.tmall.pojo.User;
 import com.owl.tmall.service.CategoryService;
+import com.owl.tmall.service.OrderItemService;
 import com.owl.tmall.service.ProductImageService;
 import com.owl.tmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import util.ImageUtil;
+import util.Result;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +34,8 @@ public class ProductImageController {
     ProductService productService;
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    OrderItemService orderItemService;
 
     @GetMapping("/products/{pid}/productImages")
     public List<ProductImage> list(@RequestParam("type") String type, @PathVariable("pid") int pid) throws Exception {
@@ -112,4 +119,6 @@ public class ProductImageController {
 
         return null;
     }
+
+
 }

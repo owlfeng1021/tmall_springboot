@@ -134,11 +134,21 @@ public class ProductService  {
         for (Product product : products)
             setSaleAndReviewNumber(product);
     }
-    public List<Product> search(String keyword,int start ,int size){
-//        Sort sort = new Sort(Sort.Direction.DESC, "id");
-//        Pageable pageable = new PageRequest(start, size, sort);
-//        List<Product> byNameLike = productDAO.findByNameLike("%"+keyword+"%", pageable);
-//        return byNameLike;
+
+
+
+
+    /**
+     * //        Sort sort = new Sort(Sort.Direction.DESC, "id");
+     * //        Pageable pageable = new PageRequest(start, size, sort);
+     * //        List<Product> byNameLike = productDAO.findByNameLike("%"+keyword+"%", pageable);
+     * //        return byNameLike;
+     * @param keyword
+     * @param start
+     * @param size
+     * @return
+     */
+    public List<Product> search(String keyword, int start, int size) {
         initDatabase2ES();
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
                 .add(QueryBuilders.matchPhraseQuery("name", keyword),
@@ -150,6 +160,7 @@ public class ProductService  {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withPageable(pageable)
                 .withQuery(functionScoreQueryBuilder).build();
+
         Page<Product> page = productEsDao.search(searchQuery);
         return page.getContent();
     }

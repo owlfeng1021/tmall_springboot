@@ -7,12 +7,15 @@ import com.owl.tmall.pojo.Product;
 import com.owl.tmall.pojo.User;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
+@Cacheable(cacheNames = "orderItems")
 public class OrderItemService {
     @Autowired
     private OrderItemDao orderItemDao;
@@ -37,6 +40,7 @@ public class OrderItemService {
         order.setTotal(total);
         order.setTotalNumber(totalNumber);
     }
+
     public void fill(List<Order> orderList){
         for (Order o: orderList )
         {
@@ -46,6 +50,7 @@ public class OrderItemService {
 
 
 //    public void fill(Order order) {}
+    @Cacheable(key = "'orderItems-oid-'+#p0")
     public List<OrderItem> listByOrder(Order order){
         return orderItemDao.findByOrderOrderByIdDesc(order);
     }
@@ -60,22 +65,27 @@ public class OrderItemService {
         }
         return result;
     }
+
     public List<OrderItem> listByProduct(Product product) {
         return orderItemDao.findByProduct(product);
     }
-
+    @Cacheable(key = "'orderItems-uid-'+#p0")
     public List<OrderItem> listByUser(User user){
         return orderItemDao.findByUserAndOrderIsNull(user);
     }
+    @CacheEvict(allEntries = true)
     public void add(OrderItem orderItem){
         orderItemDao.save(orderItem);
     }
+    @CacheEvict(allEntries = true)
     public void update(OrderItem orderItem){
         orderItemDao.save(orderItem);
     }
+    @Cacheable(key = "'orderItems-one-'+#p0")
     public OrderItem get(int id){
         return  orderItemDao.getOne(id);
     }
+    @CacheEvict(allEntries = true)
     public void delete(int id){
         orderItemDao.delete(id);
     }

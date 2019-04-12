@@ -27,4 +27,7 @@ public class WebMvcConfiguraion extends WebMvcConfigurerAdapter {
                 .addPathPatterns("/**");
 
     }
+
+
+
 }

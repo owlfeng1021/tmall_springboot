@@ -5,17 +5,21 @@ import com.owl.tmall.pojo.Category;
 import com.owl.tmall.pojo.Product;
 import com.owl.tmall.pojo.Review;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import util.Page4Navigator;
+import util.SpringContextUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Cacheable(cacheNames = "products")
 public class ProductService {
     @Autowired
     ProductDao productDAO;
@@ -27,22 +31,24 @@ public class ProductService {
     OrderItemService orderItemService;
     @Autowired
     ReviewService reviewService;
+
+    @CacheEvict(allEntries = true)
     public void add(Product bean) {
         productDAO.save(bean);
     }
-
+    @CacheEvict(allEntries = true)
     public void delete(int id) {
         productDAO.delete(id);
     }
-
+    @Cacheable(key = "'products-one-'+#p0" )
     public Product get(int id) {
         return productDAO.findOne(id);
     }
-
+    @CacheEvict(allEntries = true)
     public void update(Product bean) {
         productDAO.save(bean);
     }
-
+    @Cacheable(key = "'products-cid-'+#p0+'-page-'+#p1+'-'+#p2 ")
     public Page4Navigator<Product> list(int cid, int start, int size, int navigatePages) {
         Category category = categoryService.get(cid);
         Sort sort=new Sort(Sort.Direction.DESC,"id");
@@ -52,9 +58,12 @@ public class ProductService {
     }
     // 1. 为分类填充产品集合
     public void fill(Category category){
-        List<Product> byCategoryOrderById = productDAO.findByCategoryOrderById(category);
-        productImageService.setFirstProdutImages(byCategoryOrderById);
-        category.setProducts(byCategoryOrderById);
+//       因为这里要使用redis缓存 所以要使用
+//        List<Product> byCategoryOrderById = productDAO.findByCategoryOrderById(category);
+        ProductService productService = SpringContextUtil.getBean(ProductService.class);
+        List<Product> productList = productService.listByCategory(category);
+        productImageService.setFirstProdutImages(productList);
+        category.setProducts(productList);
     }
     //2. 为多个分类填充产品集合
     public void fill(List<Category> categorys){
@@ -91,6 +100,7 @@ public class ProductService {
         }
     }
     //4. 查询某个分类下的所有产品
+    @Cacheable(key = "'products-cid-'+#p0")
     public List<Product> listByCategory(Category category){
        return  productDAO.findByCategoryOrderById(category);
     }

@@ -3,11 +3,12 @@ package com.owl.tmall.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "propertyvalue")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"}) //在此标记不生成json对象的属性
-public class PropertyValue {
+public class PropertyValue implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -50,7 +50,7 @@ public class OrderItemService {
 
 
 //    public void fill(Order order) {}
-    @Cacheable(key = "'orderItems-oid-'+#p0")
+//    @Cacheable(key = "'orderItems-oid-'+#p0")
     public List<OrderItem> listByOrder(Order order){
         return orderItemDao.findByOrderOrderByIdDesc(order);
     }
@@ -69,23 +69,23 @@ public class OrderItemService {
     public List<OrderItem> listByProduct(Product product) {
         return orderItemDao.findByProduct(product);
     }
-    @Cacheable(key = "'orderItems-uid-'+#p0")
+//    @Cacheable(key = "'orderItems-uid-'+#p0")
     public List<OrderItem> listByUser(User user){
         return orderItemDao.findByUserAndOrderIsNull(user);
     }
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void add(OrderItem orderItem){
         orderItemDao.save(orderItem);
     }
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void update(OrderItem orderItem){
         orderItemDao.save(orderItem);
     }
-    @Cacheable(key = "'orderItems-one-'+#p0")
+//    @Cacheable(key = "'orderItems-one-'+#p0")
     public OrderItem get(int id){
         return  orderItemDao.getOne(id);
     }
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void delete(int id){
         orderItemDao.delete(id);
     }

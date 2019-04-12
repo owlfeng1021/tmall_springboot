@@ -29,7 +29,7 @@ import java.util.List;
  * 那么为什么不用 @JsonIgnoreProperties 来标记这个字段呢？ 因为后续我们要整合Redis，如果标记成了 @JsonIgnoreProperties 会在和 Redis 整合的时候有 Bug, 所以还是采用这种方式比较好。 这些都是站长掉进去的坑~
  */
 @Service
-@Cacheable(cacheNames = "orders")
+//@Cacheable(cacheNames = "orders")
 public class OrderService {
     public static final String waitPay = "waitPay";
     public static final String waitDelivery = "waitDelivery";
@@ -42,7 +42,7 @@ public class OrderService {
     OrderDao orderDao;
     @Autowired
     OrderItemService orderItemService;
-    @Cacheable(key = "'orders-page-'+#p0+'-'+#p1")
+//    @Cacheable(key = "'orders-page-'+#p0+'-'+#p1")
     public Page4Navigator<Order> list(int start,int size,int navigatePages){
 //         sort
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -66,15 +66,15 @@ public class OrderService {
             removeOrderFromOrderItem(o);
         }
     }
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void add(Order order){
         orderDao.save(order);
     }
-    @Cacheable(key = "'orders-one-'+#p0")
+//    @Cacheable(key = "'orders-page-'+#p0")
     public Order get(int id){
         return  orderDao.getOne(id);
     }
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void update(Order order){
          orderDao.save(order);
     }

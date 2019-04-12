@@ -3,11 +3,12 @@ package com.owl.tmall.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "orderitem")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class OrderItem {
+public class OrderItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// identty 一致
     @Column(name = "id")

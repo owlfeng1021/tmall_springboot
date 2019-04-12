@@ -17,18 +17,18 @@ import util.Page4Navigator;
 import java.util.List;
 
 @Service
-@CacheConfig(cacheNames = "categories")
+//@CacheConfig(cacheNames = "categories")
 public class CategoryService {
     @Autowired
     public CategoryDao categoryDao;
 
-    @Cacheable(key="'categories-all'")
+//    @Cacheable(key="'categories-all'")
     public List<Category> getCategory() {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         return categoryDao.findAll(sort);
     }
 
-    @Cacheable(key = "'categories-page-'+#p0+ '-' + #p1")
+//    @Cacheable(key = "'categories-page-'+#p0+ '-' + #p1")
     public Page4Navigator<Category> getCategoryPage(int start, int size, int navigatePage) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(start, size, sort); // 2.0 使用PageRequest.of
@@ -37,22 +37,22 @@ public class CategoryService {
 
     }
 
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void save(Category category) {
         categoryDao.save(category);
     }
 
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void delete(int id) {
         categoryDao.delete(id);
     }
 
-    @Cacheable(key = "'categories-one-'+ #p0") // 这个p是param 0是第0个参数的意思
+//    @Cacheable(key="'categories-one-'+ #p0") // 这个p是param 0是第0个参数的意思
     public Category get(int id) {
         return categoryDao.getOne(id);
     }
 
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void update(Category category) {
         categoryDao.save(category);
     }
